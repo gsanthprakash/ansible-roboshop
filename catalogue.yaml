@@ -1,0 +1,30 @@
+- name: install catalogue
+  hosts: catalogue
+  become: yes
+  tasks:
+  - name: disabling current nodejs 
+    ansible.builtin.shell: dnf module disable nodejs -y ; dnf module enable nodejs:18 -y
+
+  - name: Installing the nodejs
+    ansible.builtin.yum:
+      name: nodejs
+      state: installed
+  
+  - name: check roboshop user exist or not
+    ansible.builtin.command: id roboshop
+    register: output
+    ignore_errors: true
+  
+  - name: print the command output
+    ansible.builtin.debug:
+      msg: "output is: {{output}}"
+
+  - name: print exit status
+    ansible.builtin.debug:
+      msg: "output is: {{output.rc}}"
+
+  - name: create user roboshop
+    become: yes # sudo for this taks only
+    ansible.builtin.user:
+      name: roboshop
+    when: output.rc != 0
