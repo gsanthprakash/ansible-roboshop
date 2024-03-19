@@ -1,6 +1,6 @@
 - name: Install Mongodb component
   hosts: mongodb
-  becom: yes
+  become: yes
   tasks:
   - name: Copy the mongodb repo
     ansible.builtin.copy:
@@ -12,8 +12,3 @@
       name: mongodb-org
       state: installed
 
-  - name: Enable and start MongoDB service
-    service:
-      name: mongod
-      state: started
-      enabled: yes
